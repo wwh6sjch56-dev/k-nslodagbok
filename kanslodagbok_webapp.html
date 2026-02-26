@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Min Känslodagbok</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(180deg, #ffe6f2, #fff0f8);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app {
+    background: rgba(255,255,255,0.9);
+    width: 95%;
+    max-width: 420px;
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+    border: 2px solid #ffcce6;
+}
+
+h1 {
+    text-align: center;
+    color: #ff69b4;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #ff9acb;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+label {
+    color: #ff69b4;
+    font-weight: 600;
+}
+
+input, textarea {
+    width: 100%;
+    border-radius: 15px;
+    border: 1px solid #ffcce6;
+    padding: 10px;
+    font-family: 'Quicksand', sans-serif;
+    margin-top: 5px;
+    background: #fff;
+}
+
+textarea {
+    resize: none;
+    height: 100px;
+}
+
+button {
+    width: 100%;
+    margin-top: 10px;
+    background: linear-gradient(90deg, #ff9acb, #ff69b4);
+    border: none;
+    color: white;
+    padding: 12px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.entry {
+    background: #fff0f8;
+    border-radius: 15px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px dashed #ffb6d9;
+}
+
+.entry-date {
+    font-size: 12px;
+    color: #ff69b4;
+    font-weight: bold;
+}
+
+.flower {
+    position: absolute;
+    font-size: 22px;
+    opacity: 0.6;
+}
+
+.f1 { top: 10px; left: 10px; }
+.f2 { top: 10px; right: 10px; }
+.f3 { bottom: 10px; left: 15px; }
+.f4 { bottom: 10px; right: 15px; }
+</style>
+</head>
+<body>
+<div class="flower f1">🌸</div>
+<div class="flower f2">🌷</div>
+<div class="flower f3">🌺</div>
+<div class="flower f4">💮</div>
+
+<div class="app">
+    <h1>Min Känslodagbok</h1>
+    <div class="subtitle">✨ min rosa lilla trygghetsplats ✨</div>
+
+    <label>Datum</label>
+    <input type="date" id="date">
+
+    <label>Hur känner jag mig idag?</label>
+    <textarea id="text" placeholder="Skriv dina känslor här..."></textarea>
+
+    <button onclick="saveEntry()">Spara dagens känslor 💖</button>
+
+    <div id="entries"></div>
+</div>
+
+<script>
+function saveEntry() {
+    const date = document.getElementById('date').value;
+    const text = document.getElementById('text').value;
+
+    if (!date || !text) {
+        alert('Fyll i både datum och text 💗');
+        return;
+    }
+
+    let entries = JSON.parse(localStorage.getItem('kanslor')) || [];
+    entries.push({ date, text });
+    localStorage.setItem('kanslor', JSON.stringify(entries));
+
+    document.getElementById('text').value = '';
+    loadEntries();
+}
+
+function loadEntries() {
+    const container = document.getElementById('entries');
+    container.innerHTML = '';
+
+    let entries = JSON.parse(localStorage.getItem('kanslor')) || [];
+
+    entries.reverse().forEach(e => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+        div.innerHTML = `<div class="entry-date">${e.date}</div><div>${e.text}</div>`;
+        container.appendChild(div);
+    });
+}
+
+loadEntries();
+</script>
+</body>
+</html>
